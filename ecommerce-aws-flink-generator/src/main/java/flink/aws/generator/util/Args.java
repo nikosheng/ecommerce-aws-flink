@@ -10,6 +10,7 @@ public class Args {
     @Option(name = "-broker", required = true, usage = "kafka broker list")
     private String broker;
 
+
     public String getFile() {
         return file;
     }
