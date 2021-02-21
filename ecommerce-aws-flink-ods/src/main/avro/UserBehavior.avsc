@@ -1,0 +1,27 @@
+{
+    "name": "UserBehavior",
+    "namespace": "flink.aws.ods.events",
+    "type": "record",
+    "fields": [
+        {
+            "name": "userId",
+            "type": "long"
+        },
+        {
+            "name": "itemId",
+            "type": "long"
+        },
+        {
+            "name": "categoryId",
+            "type": "long"
+        },
+        {
+            "name": "behavior",
+            "type": "string"
+        },
+        {
+            "name": "timestamp",
+            "type": "long"
+        }
+    ]
+}
