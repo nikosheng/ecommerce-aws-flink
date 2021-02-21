@@ -1,25 +1,28 @@
 package flink.aws.generator;
 
-import flink.aws.generator.input.UserBehaviorCsvFileReader;
 import flink.aws.generator.input.KafkaProducer;
-import flink.aws.generator.util.ParameterToolUtils;
-import org.apache.flink.api.java.utils.ParameterTool;
+import flink.aws.generator.input.UserBehaviorCsvFileReader;
+import flink.aws.generator.util.Args;
+import org.kohsuke.args4j.CmdLineParser;
 
-import java.io.IOException;
 import java.util.stream.Stream;
 
 public class CSV2KafkaApplication {
-    public static void main(String[] args) throws IOException {
-        ParameterTool parameter = ParameterToolUtils.fromArgsAndApplicationProperties(args);
+
+
+    public static void main(String[] args) throws Exception {
+        Args arguments = new Args();
+        CmdLineParser parser = new CmdLineParser(arguments);
+        parser.parseArgument(args);
         // 文件地址
 //        String filePath = "/Users/jiasfeng/IdeaProjects/ecommerce-aws-flink/ecommerce-aws-flink-generator/src/main/resources/UserBehavior_random_10000.csv";
-        String filePath = parameter.getRequired("file");
+        String filePath = arguments.getFile();
         // kafka topic
 //        String topic = "user_behavior";
-        String topic = parameter.getRequired("topic");
+        String topic = arguments.getTopic();
         // kafka borker地址
 //        String broker = "localhost:9092";
-        String broker = parameter.getRequired("broker-list");
+        String broker = arguments.getBroker();
 
         Stream.generate(new UserBehaviorCsvFileReader(filePath))
                 .sequential()
