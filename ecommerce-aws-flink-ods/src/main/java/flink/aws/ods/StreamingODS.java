@@ -38,10 +38,10 @@ public class StreamingODS {
                 .addSource(getKafkaSource(parameter))
                 .name("Kafka source");
 
-        events
-                .keyBy(UserBehavior::getItemId)
-                .addSink(getKafkaSink(parameter))
-                .name("Kafka sink");
+//        events
+//                .keyBy(UserBehavior::getItemId)
+//                .addSink(getKafkaSink(parameter))
+//                .name("Kafka sink");
 
         events
                 .keyBy(UserBehavior::getItemId)
@@ -86,7 +86,7 @@ public class StreamingODS {
 
         Properties properties = new Properties();
         properties.setProperty("bootstrap.servers", bootstrapServers);
-        properties.setProperty("group.id", "kafka-streaming-etl-consumer");
+        properties.setProperty("group.id", "flink-kafka-ods-1");
         properties.setProperty("auto.offset.reset", "latest");
         properties.setProperty(ConsumerConfig.ISOLATION_LEVEL_CONFIG, "read_committed");
 
@@ -105,7 +105,7 @@ public class StreamingODS {
 
     private static SinkFunction<UserBehavior> getS3Sink(ParameterTool parameter) {
         String bucket = parameter.getRequired("OutputBucket");
-        LOG.info("Writing to {} buket", bucket);
+        LOG.info("Writing to {} bucket", bucket);
 
         String prefix = String.format("%sjob_start=%s/", parameter.get("OutputPrefix", ""), System.currentTimeMillis());
 
