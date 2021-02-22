@@ -5,17 +5,23 @@ import flink.aws.ods.events.UserBehaviorSchema;
 import flink.aws.ods.util.ParameterToolUtils;
 import flink.aws.ods.s3.UserBehaviorBucketAssigner;
 import org.apache.flink.api.common.serialization.Encoder;
+import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.core.fs.Path;
 import org.apache.flink.formats.parquet.avro.ParquetAvroWriters;
 import org.apache.flink.streaming.api.datastream.DataStream;
+import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.functions.ProcessFunction;
 import org.apache.flink.streaming.api.functions.sink.SinkFunction;
 import org.apache.flink.streaming.api.functions.sink.filesystem.StreamingFileSink;
 import org.apache.flink.streaming.api.functions.sink.filesystem.rollingpolicies.DefaultRollingPolicy;
 import org.apache.flink.streaming.api.functions.source.SourceFunction;
+import org.apache.flink.streaming.api.operators.Output;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
+import org.apache.flink.util.Collector;
+import org.apache.flink.util.OutputTag;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +31,10 @@ import java.util.Properties;
 
 public class StreamingODS {
     private static final Logger LOG = LoggerFactory.getLogger(StreamingODS.class);
+
+    // set up side output stream to output records to S3 and Kafka sink
+    private final static OutputTag<UserBehavior> s3OutputTag = new OutputTag<>("s3-output-tag", TypeInformation.of(UserBehavior.class));
+    private final static OutputTag<UserBehavior> kafkaOutputTag = new OutputTag<>("kafka-output-tag", TypeInformation.of(UserBehavior.class));
 
     public static void main(String[] args) throws Exception {
         ParameterTool parameter = ParameterToolUtils.fromArgsAndApplicationProperties(args);
@@ -38,12 +48,26 @@ public class StreamingODS {
                 .addSource(getKafkaSource(parameter))
                 .name("Kafka source");
 
-//        events
-//                .keyBy(UserBehavior::getItemId)
-//                .addSink(getKafkaSink(parameter))
-//                .name("Kafka sink");
+        SingleOutputStreamOperator<UserBehavior> mainStream = events.process(new ProcessFunction<UserBehavior, UserBehavior>() {
+            @Override
+            public void processElement(UserBehavior userBehavior, Context context, Collector<UserBehavior> collector) throws Exception {
+                collector.collect(userBehavior);
 
-        events
+                context.output(s3OutputTag, userBehavior);
+                context.output(kafkaOutputTag, userBehavior);
+            }
+        });
+
+        DataStream<UserBehavior> kafkaSinkStream = mainStream.getSideOutput(kafkaOutputTag);
+
+        kafkaSinkStream
+                .keyBy(UserBehavior::getItemId)
+                .addSink(getKafkaSink(parameter))
+                .name("Kafka sink");
+
+        DataStream<UserBehavior> s3SinkStream = mainStream.getSideOutput(s3OutputTag);
+
+        s3SinkStream
                 .keyBy(UserBehavior::getItemId)
                 .addSink(getS3Sink(parameter))
                 .name("S3 sink");
