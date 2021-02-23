@@ -3,6 +3,7 @@ package flink.aws.generator.input;
 import com.csvreader.CsvWriter;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.math3.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,20 +18,27 @@ import java.util.Random;
 
 public class RandomUserBehavior {
     public static void main(String[] args) {
-        String filePath = "/Users/jiasfeng/IdeaProjects/flink-aws/src/main/resources/UserBehavior_random_10000.csv";
+        String filePath = "/Users/jiasfeng/IdeaProjects/ecommerce-aws-flink/ecommerce-aws-flink-generator/src/main/resources/UserBehavior_weight_10000.csv";
         CsvConfig csvConfig = new CsvConfig("utf-8","yyyy-MM-dd HH:mm:ss:SSS",',');
         CSVUtils csvUtil = new CSVUtils();
 
         ArrayList<UserBehavior> behaviors = new ArrayList<>();
         Random random = new Random();
 
+        List<Pair<String, Integer>> behaviorList = new ArrayList<>();
+        behaviorList.add(new Pair<>("pv", 4));
+        behaviorList.add(new Pair<>("fav", 3));
+        behaviorList.add(new Pair<>("cart", 2));
+        behaviorList.add(new Pair<>("buy", 1));
+        WeightRandom<String, Integer> weightRandom = new WeightRandom<>(behaviorList);
+
         final int SIZE = 10000;
-        final String[] BEHAVIORS = new String[]{
-                "pv",
-                "fav",
-                "buy",
-                "cart"
-        };
+//        final String[] BEHAVIORS = new String[]{
+//                "pv",
+//                "fav",
+//                "buy",
+//                "cart"
+//        };
 
         int[] USERIDS = new int[100];
 
@@ -56,7 +64,7 @@ public class RandomUserBehavior {
                     USERIDS[random.nextInt(100)],
                     ITEMIDS[random.nextInt(10)],
                     CATEGORYIDS[random.nextInt(5)],
-                    BEHAVIORS[random.nextInt(1)],
+                    weightRandom.random(),
                     ts
             );
             behaviors.add(behavior);

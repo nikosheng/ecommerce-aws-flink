@@ -2,8 +2,8 @@ package flink.aws.ods;
 
 import flink.aws.ods.events.UserBehavior;
 import flink.aws.ods.events.UserBehaviorSchema;
-import flink.aws.ods.util.ParameterToolUtils;
 import flink.aws.ods.s3.UserBehaviorBucketAssigner;
+import flink.aws.ods.util.ParameterToolUtils;
 import org.apache.flink.api.common.serialization.Encoder;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.utils.ParameterTool;
@@ -17,7 +17,6 @@ import org.apache.flink.streaming.api.functions.sink.SinkFunction;
 import org.apache.flink.streaming.api.functions.sink.filesystem.StreamingFileSink;
 import org.apache.flink.streaming.api.functions.sink.filesystem.rollingpolicies.DefaultRollingPolicy;
 import org.apache.flink.streaming.api.functions.source.SourceFunction;
-import org.apache.flink.streaming.api.operators.Output;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
 import org.apache.flink.util.Collector;

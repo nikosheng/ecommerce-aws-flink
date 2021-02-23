@@ -4,15 +4,15 @@
     "type": "record",
     "fields": [
         {
-            "name": "userId",
+            "name": "userid",
             "type": "long"
         },
         {
-            "name": "itemId",
+            "name": "itemid",
             "type": "long"
         },
         {
-            "name": "categoryId",
+            "name": "categoryid",
             "type": "long"
         },
         {
