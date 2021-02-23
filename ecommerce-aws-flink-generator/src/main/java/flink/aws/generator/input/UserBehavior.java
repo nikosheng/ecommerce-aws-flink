@@ -5,13 +5,13 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class UserBehavior {
 
     @JsonFormat
-    private long userId;
+    private long userid;
 
     @JsonFormat
-    private long itemId;
+    private long itemid;
 
     @JsonFormat
-    private long categoryId;
+    private long categoryid;
 
     @JsonFormat
     private String behavior;
@@ -22,28 +22,28 @@ public class UserBehavior {
     public UserBehavior() {
     }
 
-    public long getUserId() {
-        return userId;
+    public long getUserid() {
+        return userid;
     }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
+    public void setUserid(long userid) {
+        this.userid = userid;
     }
 
-    public long getItemId() {
-        return itemId;
+    public long getItemid() {
+        return itemid;
     }
 
-    public void setItemId(long itemId) {
-        this.itemId = itemId;
+    public void setItemid(long itemid) {
+        this.itemid = itemid;
     }
 
-    public long getCategoryId() {
-        return categoryId;
+    public long getCategoryid() {
+        return categoryid;
     }
 
-    public void setCategoryId(long categoryId) {
-        this.categoryId = categoryId;
+    public void setCategoryid(long categoryid) {
+        this.categoryid = categoryid;
     }
 
     public String getBehavior() {
@@ -62,10 +62,10 @@ public class UserBehavior {
         this.timestamp = timestamp;
     }
 
-    public UserBehavior(long userId, long itemId, long categoryId, String behavior, Long timestamp) {
-        this.userId = userId;
-        this.itemId = itemId;
-        this.categoryId = categoryId;
+    public UserBehavior(long userId, long itemid, long categoryId, String behavior, Long timestamp) {
+        this.userid = userId;
+        this.itemid = itemid;
+        this.categoryid = categoryId;
         this.behavior = behavior;
         this.timestamp = timestamp;
     }
