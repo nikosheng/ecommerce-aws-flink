@@ -3,7 +3,7 @@
  *
  * DO NOT EDIT DIRECTLY
  */
-package flink.aws.ods.events;
+package flink.aws.hotitems.events;
 
 import org.apache.avro.specific.SpecificData;
 import org.apache.avro.message.BinaryMessageEncoder;
@@ -13,8 +13,8 @@ import org.apache.avro.message.SchemaStore;
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
 public class UserBehavior extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = -2464383237251662192L;
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"UserBehavior\",\"namespace\":\"flink.aws.ods.events\",\"fields\":[{\"name\":\"userid\",\"type\":\"long\"},{\"name\":\"itemid\",\"type\":\"long\"},{\"name\":\"categoryid\",\"type\":\"long\"},{\"name\":\"behavior\",\"type\":\"string\"},{\"name\":\"timestamp\",\"type\":\"long\"}]}");
+  private static final long serialVersionUID = 771043793089031922L;
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"UserBehavior\",\"namespace\":\"flink.aws.hotitems.events\",\"fields\":[{\"name\":\"userid\",\"type\":\"long\"},{\"name\":\"itemid\",\"type\":\"long\"},{\"name\":\"categoryid\",\"type\":\"long\"},{\"name\":\"behavior\",\"type\":\"string\"},{\"name\":\"timestamp\",\"type\":\"long\"}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static SpecificData MODEL$ = new SpecificData();
@@ -190,8 +190,8 @@ public class UserBehavior extends org.apache.avro.specific.SpecificRecordBase im
    * Creates a new UserBehavior RecordBuilder.
    * @return A new UserBehavior RecordBuilder
    */
-  public static flink.aws.ods.events.UserBehavior.Builder newBuilder() {
-    return new flink.aws.ods.events.UserBehavior.Builder();
+  public static flink.aws.hotitems.events.UserBehavior.Builder newBuilder() {
+    return new flink.aws.hotitems.events.UserBehavior.Builder();
   }
 
   /**
@@ -199,8 +199,8 @@ public class UserBehavior extends org.apache.avro.specific.SpecificRecordBase im
    * @param other The existing builder to copy.
    * @return A new UserBehavior RecordBuilder
    */
-  public static flink.aws.ods.events.UserBehavior.Builder newBuilder(flink.aws.ods.events.UserBehavior.Builder other) {
-    return new flink.aws.ods.events.UserBehavior.Builder(other);
+  public static flink.aws.hotitems.events.UserBehavior.Builder newBuilder(flink.aws.hotitems.events.UserBehavior.Builder other) {
+    return new flink.aws.hotitems.events.UserBehavior.Builder(other);
   }
 
   /**
@@ -208,8 +208,8 @@ public class UserBehavior extends org.apache.avro.specific.SpecificRecordBase im
    * @param other The existing instance to copy.
    * @return A new UserBehavior RecordBuilder
    */
-  public static flink.aws.ods.events.UserBehavior.Builder newBuilder(flink.aws.ods.events.UserBehavior other) {
-    return new flink.aws.ods.events.UserBehavior.Builder(other);
+  public static flink.aws.hotitems.events.UserBehavior.Builder newBuilder(flink.aws.hotitems.events.UserBehavior other) {
+    return new flink.aws.hotitems.events.UserBehavior.Builder(other);
   }
 
   /**
@@ -233,7 +233,7 @@ public class UserBehavior extends org.apache.avro.specific.SpecificRecordBase im
      * Creates a Builder by copying an existing Builder.
      * @param other The existing Builder to copy.
      */
-    private Builder(flink.aws.ods.events.UserBehavior.Builder other) {
+    private Builder(flink.aws.hotitems.events.UserBehavior.Builder other) {
       super(other);
       if (isValidValue(fields()[0], other.userid)) {
         this.userid = data().deepCopy(fields()[0].schema(), other.userid);
@@ -261,7 +261,7 @@ public class UserBehavior extends org.apache.avro.specific.SpecificRecordBase im
      * Creates a Builder by copying an existing UserBehavior instance
      * @param other The existing instance to copy.
      */
-    private Builder(flink.aws.ods.events.UserBehavior other) {
+    private Builder(flink.aws.hotitems.events.UserBehavior other) {
             super(SCHEMA$);
       if (isValidValue(fields()[0], other.userid)) {
         this.userid = data().deepCopy(fields()[0].schema(), other.userid);
@@ -298,7 +298,7 @@ public class UserBehavior extends org.apache.avro.specific.SpecificRecordBase im
       * @param value The value of 'userid'.
       * @return This builder.
       */
-    public flink.aws.ods.events.UserBehavior.Builder setUserid(long value) {
+    public flink.aws.hotitems.events.UserBehavior.Builder setUserid(long value) {
       validate(fields()[0], value);
       this.userid = value;
       fieldSetFlags()[0] = true;
@@ -318,7 +318,7 @@ public class UserBehavior extends org.apache.avro.specific.SpecificRecordBase im
       * Clears the value of the 'userid' field.
       * @return This builder.
       */
-    public flink.aws.ods.events.UserBehavior.Builder clearUserid() {
+    public flink.aws.hotitems.events.UserBehavior.Builder clearUserid() {
       fieldSetFlags()[0] = false;
       return this;
     }
@@ -336,7 +336,7 @@ public class UserBehavior extends org.apache.avro.specific.SpecificRecordBase im
       * @param value The value of 'itemid'.
       * @return This builder.
       */
-    public flink.aws.ods.events.UserBehavior.Builder setItemid(long value) {
+    public flink.aws.hotitems.events.UserBehavior.Builder setItemid(long value) {
       validate(fields()[1], value);
       this.itemid = value;
       fieldSetFlags()[1] = true;
@@ -356,7 +356,7 @@ public class UserBehavior extends org.apache.avro.specific.SpecificRecordBase im
       * Clears the value of the 'itemid' field.
       * @return This builder.
       */
-    public flink.aws.ods.events.UserBehavior.Builder clearItemid() {
+    public flink.aws.hotitems.events.UserBehavior.Builder clearItemid() {
       fieldSetFlags()[1] = false;
       return this;
     }
@@ -374,7 +374,7 @@ public class UserBehavior extends org.apache.avro.specific.SpecificRecordBase im
       * @param value The value of 'categoryid'.
       * @return This builder.
       */
-    public flink.aws.ods.events.UserBehavior.Builder setCategoryid(long value) {
+    public flink.aws.hotitems.events.UserBehavior.Builder setCategoryid(long value) {
       validate(fields()[2], value);
       this.categoryid = value;
       fieldSetFlags()[2] = true;
@@ -394,7 +394,7 @@ public class UserBehavior extends org.apache.avro.specific.SpecificRecordBase im
       * Clears the value of the 'categoryid' field.
       * @return This builder.
       */
-    public flink.aws.ods.events.UserBehavior.Builder clearCategoryid() {
+    public flink.aws.hotitems.events.UserBehavior.Builder clearCategoryid() {
       fieldSetFlags()[2] = false;
       return this;
     }
@@ -412,7 +412,7 @@ public class UserBehavior extends org.apache.avro.specific.SpecificRecordBase im
       * @param value The value of 'behavior'.
       * @return This builder.
       */
-    public flink.aws.ods.events.UserBehavior.Builder setBehavior(java.lang.CharSequence value) {
+    public flink.aws.hotitems.events.UserBehavior.Builder setBehavior(java.lang.CharSequence value) {
       validate(fields()[3], value);
       this.behavior = value;
       fieldSetFlags()[3] = true;
@@ -432,7 +432,7 @@ public class UserBehavior extends org.apache.avro.specific.SpecificRecordBase im
       * Clears the value of the 'behavior' field.
       * @return This builder.
       */
-    public flink.aws.ods.events.UserBehavior.Builder clearBehavior() {
+    public flink.aws.hotitems.events.UserBehavior.Builder clearBehavior() {
       behavior = null;
       fieldSetFlags()[3] = false;
       return this;
@@ -451,7 +451,7 @@ public class UserBehavior extends org.apache.avro.specific.SpecificRecordBase im
       * @param value The value of 'timestamp'.
       * @return This builder.
       */
-    public flink.aws.ods.events.UserBehavior.Builder setTimestamp(long value) {
+    public flink.aws.hotitems.events.UserBehavior.Builder setTimestamp(long value) {
       validate(fields()[4], value);
       this.timestamp = value;
       fieldSetFlags()[4] = true;
@@ -471,7 +471,7 @@ public class UserBehavior extends org.apache.avro.specific.SpecificRecordBase im
       * Clears the value of the 'timestamp' field.
       * @return This builder.
       */
-    public flink.aws.ods.events.UserBehavior.Builder clearTimestamp() {
+    public flink.aws.hotitems.events.UserBehavior.Builder clearTimestamp() {
       fieldSetFlags()[4] = false;
       return this;
     }

@@ -1,0 +1,27 @@
+{
+    "name": "UserBehavior",
+    "namespace": "flink.aws.hotitems.events",
+    "type": "record",
+    "fields": [
+        {
+            "name": "userid",
+            "type": "long"
+        },
+        {
+            "name": "itemid",
+            "type": "long"
+        },
+        {
+            "name": "categoryid",
+            "type": "long"
+        },
+        {
+            "name": "behavior",
+            "type": "string"
+        },
+        {
+            "name": "timestamp",
+            "type": "long"
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "name": "ItemViewCount",
+    "namespace": "flink.aws.hotitems.events",
+    "type": "record",
+    "fields": [
+        {
+            "name": "itemid",
+            "type": "long"
+        },
+        {
+            "name": "windowend",
+            "type": "long"
+        },
+        {
+            "name": "count",
+            "type": "long"
+        }
+    ]
+}

@@ -12,6 +12,7 @@
     <modules>
         <module>../ecommerce-aws-flink-ods</module>
         <module>../ecommerce-aws-flink-generator</module>
+        <module>../ecommerce-aws-flink-hotitems</module>
     </modules>
 
     <properties>

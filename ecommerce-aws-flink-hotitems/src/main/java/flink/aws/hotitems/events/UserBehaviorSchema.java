@@ -1,4 +1,4 @@
-package flink.aws.ods.events;
+package flink.aws.hotitems.events;
 
 import org.apache.avro.data.TimeConversions;
 import org.apache.avro.specific.SpecificData;

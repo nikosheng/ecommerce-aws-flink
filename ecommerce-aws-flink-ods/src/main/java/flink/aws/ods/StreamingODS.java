@@ -60,14 +60,14 @@ public class StreamingODS {
         DataStream<UserBehavior> kafkaSinkStream = mainStream.getSideOutput(kafkaOutputTag);
 
         kafkaSinkStream
-                .keyBy(UserBehavior::getItemId)
+                .keyBy(UserBehavior::getItemid)
                 .addSink(getKafkaSink(parameter))
                 .name("Kafka sink");
 
         DataStream<UserBehavior> s3SinkStream = mainStream.getSideOutput(s3OutputTag);
 
         s3SinkStream
-                .keyBy(UserBehavior::getItemId)
+                .keyBy(UserBehavior::getItemid)
                 .addSink(getS3Sink(parameter))
                 .name("S3 sink");
 
