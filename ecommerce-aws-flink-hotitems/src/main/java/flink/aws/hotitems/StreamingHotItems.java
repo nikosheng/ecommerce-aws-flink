@@ -1,6 +1,7 @@
 package flink.aws.hotitems;
 
 import com.google.gson.Gson;
+import flink.aws.hotitems.events.ItemBoard;
 import flink.aws.hotitems.events.ItemViewCount;
 import flink.aws.hotitems.events.UserBehavior;
 import flink.aws.hotitems.events.UserBehaviorSchema;
@@ -10,17 +11,14 @@ import org.apache.flink.api.common.functions.AggregateFunction;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.api.common.state.ListState;
 import org.apache.flink.api.common.state.ListStateDescriptor;
-import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.tuple.Tuple;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.AscendingTimestampExtractor;
 import org.apache.flink.streaming.api.functions.KeyedProcessFunction;
-import org.apache.flink.streaming.api.functions.ProcessFunction;
 import org.apache.flink.streaming.api.functions.sink.SinkFunction;
 import org.apache.flink.streaming.api.functions.source.SourceFunction;
 import org.apache.flink.streaming.api.functions.windowing.WindowFunction;
@@ -29,7 +27,6 @@ import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
 import org.apache.flink.util.Collector;
-import org.apache.flink.util.OutputTag;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +34,7 @@ import org.slf4j.LoggerFactory;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Properties;
 
 public class StreamingHotItems {
@@ -67,7 +65,7 @@ public class StreamingHotItems {
                 ;
 
         DataStream<ItemViewCount> windowAggStream = pvStream
-                .filter( data -> "pv".equals(data.getBehavior()))
+                .filter( data -> "pv".contentEquals(data.getBehavior()))
                 .keyBy("itemid")
                 .timeWindow(Time.hours(1), Time.minutes(1))
                 .aggregate(new ItemCountAgg(), new WindowItemCountAgg())
@@ -103,7 +101,8 @@ public class StreamingHotItems {
 
         @Override
         public void onTimer(long timestamp, OnTimerContext ctx, Collector<String> out) throws Exception {
-            ArrayList<ItemViewCount> itemViewCounts = Lists.newArrayList(itemViewCountListState.get().iterator());
+            List<ItemViewCount> itemViewCounts = Lists.newArrayList(itemViewCountListState.get().iterator());
+            List<ItemBoard> itemBoardList = Lists.newArrayList();
 
             itemViewCounts.sort(new Comparator<ItemViewCount>() {
                 @Override
@@ -112,25 +111,31 @@ public class StreamingHotItems {
                 }
             });
 
-            String jsonItemViewCounts = new Gson().toJson(itemViewCounts);
-
             StringBuilder builder = new StringBuilder();
             builder.append("=================================\n\n");
             builder.append("The end period of window: ").append(new Timestamp(timestamp - 1)).append("\n");
 
             for ( int i = 0; i < Math.min(size, itemViewCounts.size()); i++) {
                 ItemViewCount itemViewCount = itemViewCounts.get(i);
+                ItemBoard board = new ItemBoard(
+                        i + 1,
+                        itemViewCount.getItemid(),
+                        itemViewCount.getCount(),
+                        itemViewCount.getWindowend()
+                );
+                itemBoardList.add(board);
                 builder.append("No.").append(i + 1).append(": ");
                 builder.append("ItemId: ").append(itemViewCount.getItemid()).append("\n");
                 builder.append("PageView: ").append(itemViewCount.getCount()).append("\n");
             }
 
+            String jsonItemBoardList = new Gson().toJson(itemBoardList);
             builder.append("=================================\n\n");
             LOG.info(builder.toString());
 
             Thread.sleep(Time.seconds(1).toMilliseconds());
 
-            out.collect(builder.toString());
+            out.collect(jsonItemBoardList);
         }
 
         @Override
