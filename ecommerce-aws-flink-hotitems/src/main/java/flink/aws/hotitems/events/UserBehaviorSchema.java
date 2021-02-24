@@ -20,8 +20,8 @@ public class UserBehaviorSchema implements SerializationSchema<UserBehavior>, De
     }
 
     @Override
-    public byte[] serialize(UserBehavior event) {
-        return toJson(event).getBytes();
+    public byte[] serialize(UserBehavior behavior) {
+        return toJson(behavior).getBytes();
     }
 
     @Override
@@ -60,13 +60,13 @@ public class UserBehaviorSchema implements SerializationSchema<UserBehavior>, De
 
         builder.append("{");
         addField(builder, behavior, "userid");
-        builder.append(", ");
+        builder.append(",");
         addField(builder, behavior, "itemid");
-        builder.append(", ");
+        builder.append(",");
         addField(builder, behavior, "categoryid");
-        builder.append(", ");
-        addField(builder, behavior, "behavior");
-        builder.append(", ");
+        builder.append(",");
+        addTextField(builder, behavior, "behavior");
+        builder.append(",");
         addField(builder, behavior, "timestamp");
         builder.append("}");
 
@@ -82,7 +82,7 @@ public class UserBehaviorSchema implements SerializationSchema<UserBehavior>, De
         builder.append(fieldName);
         builder.append("\"");
 
-        builder.append(": ");
+        builder.append(":");
         builder.append(value);
     }
 
@@ -91,7 +91,7 @@ public class UserBehaviorSchema implements SerializationSchema<UserBehavior>, De
         builder.append(fieldName);
         builder.append("\"");
 
-        builder.append(": ");
+        builder.append(":");
         builder.append("\"");
         builder.append(behavior.get(fieldName));
         builder.append("\"");

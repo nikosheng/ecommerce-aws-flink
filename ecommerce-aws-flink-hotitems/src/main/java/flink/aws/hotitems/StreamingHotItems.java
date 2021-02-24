@@ -1,10 +1,7 @@
 package flink.aws.hotitems;
 
 import com.google.gson.Gson;
-import flink.aws.hotitems.events.ItemBoard;
-import flink.aws.hotitems.events.ItemViewCount;
-import flink.aws.hotitems.events.UserBehavior;
-import flink.aws.hotitems.events.UserBehaviorSchema;
+import flink.aws.hotitems.events.*;
 import flink.aws.hotitems.util.ParameterToolUtils;
 import org.apache.commons.compress.utils.Lists;
 import org.apache.flink.api.common.functions.AggregateFunction;
@@ -128,7 +125,8 @@ public class StreamingHotItems {
                 builder.append("PageView: ").append(itemViewCount.getCount()).append("\n");
             }
 
-            String jsonItemBoardList = new Gson().toJson(itemBoardList);
+            ItemBoardOutput itemBoardOutput = new ItemBoardOutput(itemBoardList);
+            String jsonItemBoardList = new Gson().toJson(itemBoardOutput);
             builder.append("=================================\n\n");
             LOG.info(builder.toString());
 
