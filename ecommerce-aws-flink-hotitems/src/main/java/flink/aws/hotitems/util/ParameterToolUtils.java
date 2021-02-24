@@ -24,7 +24,7 @@ public class ParameterToolUtils {
         //read the parameters from the Kinesis Analytics environment
         Map<String, Properties> applicationProperties = KinesisAnalyticsRuntime.getApplicationProperties();
 
-        Properties flinkProperties = applicationProperties.get("flink-ods");
+        Properties flinkProperties = applicationProperties.get("flink-hotitems");
 
         if (flinkProperties != null) {
             parameter = parameter.mergeWith(ParameterToolUtils.fromApplicationProperties(flinkProperties));
