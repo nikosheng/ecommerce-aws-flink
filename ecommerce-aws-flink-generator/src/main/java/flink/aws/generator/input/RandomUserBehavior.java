@@ -2,6 +2,7 @@ package flink.aws.generator.input;
 
 import com.csvreader.CsvWriter;
 import flink.aws.generator.util.Args;
+import flink.aws.generator.util.RandomArgs;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.math3.util.Pair;
@@ -23,7 +24,7 @@ import java.util.Random;
 public class RandomUserBehavior {
     public static void main(String[] args) throws CmdLineException {
 //        String filePath = "/Users/jiasfeng/IdeaProjects/ecommerce-aws-flink/ecommerce-aws-flink-generator/src/main/resources/UserBehavior_random_10000.csv";
-        Args arguments = new Args();
+        RandomArgs arguments = new RandomArgs();
         CmdLineParser parser = new CmdLineParser(arguments);
         parser.parseArgument(args);
         String filePath = arguments.getFile();
