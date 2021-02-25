@@ -1,9 +1,12 @@
 package flink.aws.generator.input;
 
 import com.csvreader.CsvWriter;
+import flink.aws.generator.util.Args;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.math3.util.Pair;
+import org.kohsuke.args4j.CmdLineException;
+import org.kohsuke.args4j.CmdLineParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,8 +21,12 @@ import java.util.List;
 import java.util.Random;
 
 public class RandomUserBehavior {
-    public static void main(String[] args) {
-        String filePath = "/Users/jiasfeng/IdeaProjects/ecommerce-aws-flink/ecommerce-aws-flink-generator/src/main/resources/UserBehavior_random_10000.csv";
+    public static void main(String[] args) throws CmdLineException {
+//        String filePath = "/Users/jiasfeng/IdeaProjects/ecommerce-aws-flink/ecommerce-aws-flink-generator/src/main/resources/UserBehavior_random_10000.csv";
+        Args arguments = new Args();
+        CmdLineParser parser = new CmdLineParser(arguments);
+        parser.parseArgument(args);
+        String filePath = arguments.getFile();
         CsvConfig csvConfig = new CsvConfig("utf-8","yyyy-MM-dd HH:mm:ss:SSS",',');
         CSVUtils csvUtil = new CSVUtils();
 
@@ -27,10 +34,10 @@ public class RandomUserBehavior {
         Random random = new Random();
 
         List<Pair<String, Integer>> behaviorList = new ArrayList<>();
-        behaviorList.add(new Pair<>("pv", 1));
-//        behaviorList.add(new Pair<>("fav", 0));
-//        behaviorList.add(new Pair<>("cart", 0));
-//        behaviorList.add(new Pair<>("buy", 0));
+        behaviorList.add(new Pair<>("pv", 8));
+        behaviorList.add(new Pair<>("fav", 2));
+        behaviorList.add(new Pair<>("cart", 3));
+        behaviorList.add(new Pair<>("buy", 1));
         WeightRandom<String, Integer> weightRandom = new WeightRandom<>(behaviorList);
 
         final int SIZE = 10000;
