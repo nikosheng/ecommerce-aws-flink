@@ -1,10 +1,14 @@
 package flink.aws.ods;
 
+import com.google.gson.Gson;
 import flink.aws.ods.events.UserBehavior;
 import flink.aws.ods.events.UserBehaviorSchema;
 import flink.aws.ods.s3.UserBehaviorBucketAssigner;
 import flink.aws.ods.util.ParameterToolUtils;
+import flink.aws.ods.vo.UserBehaviorVO;
+import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.serialization.Encoder;
+import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.core.fs.Path;
@@ -61,7 +65,25 @@ public class StreamingODS {
 
         kafkaSinkStream
                 .keyBy(UserBehavior::getItemid)
-                .addSink(getKafkaSink(parameter))
+                .map(new MapFunction<UserBehavior, UserBehaviorVO>() {
+                    @Override
+                    public UserBehaviorVO map(UserBehavior userBehavior) throws Exception {
+                        return new UserBehaviorVO(
+                          userBehavior.getUserid(),
+                          userBehavior.getItemid(),
+                          userBehavior.getCategoryid(),
+                          userBehavior.getBehavior().toString(),
+                          userBehavior.getTimestamp()
+                        );
+                    }
+                })
+                .map(new MapFunction<UserBehaviorVO, String>() {
+                    @Override
+                    public String map(UserBehaviorVO userBehaviorVO) throws Exception {
+                        return new Gson().toJson(userBehaviorVO);
+                    }
+                })
+                .addSink(getKafkaStringSink(parameter))
                 .name("Kafka sink");
 
         DataStream<UserBehavior> s3SinkStream = mainStream.getSideOutput(s3OutputTag);
@@ -124,6 +146,16 @@ public class StreamingODS {
         LOG.info("Reading from {} Kafka bootstrapServers", bootstrapServers);
 
         return new FlinkKafkaProducer<>(bootstrapServers, topic, new UserBehaviorSchema());
+    }
+
+    private static SinkFunction<String> getKafkaStringSink(ParameterTool parameter) {
+        String topic = parameter.getRequired("OutputKafkaTopic");
+        String bootstrapServers = parameter.getRequired("OutputKafkaBootstrapServers");
+
+        LOG.info("Reading from {} Kafka topic", topic);
+        LOG.info("Reading from {} Kafka bootstrapServers", bootstrapServers);
+
+        return new FlinkKafkaProducer<>(bootstrapServers, topic, new SimpleStringSchema());
     }
 
     private static SinkFunction<UserBehavior> getS3Sink(ParameterTool parameter) {
