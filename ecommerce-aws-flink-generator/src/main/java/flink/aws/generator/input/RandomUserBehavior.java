@@ -11,6 +11,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.Random;
 
 public class RandomUserBehavior {
     public static void main(String[] args) {
-        String filePath = "/Users/jiasfeng/IdeaProjects/ecommerce-aws-flink/ecommerce-aws-flink-generator/src/main/resources/UserBehavior_weight_10000.csv";
+        String filePath = "/Users/jiasfeng/IdeaProjects/ecommerce-aws-flink/ecommerce-aws-flink-generator/src/main/resources/UserBehavior_random_10000.csv";
         CsvConfig csvConfig = new CsvConfig("utf-8","yyyy-MM-dd HH:mm:ss:SSS",',');
         CSVUtils csvUtil = new CSVUtils();
 
@@ -26,10 +27,10 @@ public class RandomUserBehavior {
         Random random = new Random();
 
         List<Pair<String, Integer>> behaviorList = new ArrayList<>();
-        behaviorList.add(new Pair<>("pv", 4));
-        behaviorList.add(new Pair<>("fav", 3));
-        behaviorList.add(new Pair<>("cart", 2));
-        behaviorList.add(new Pair<>("buy", 1));
+        behaviorList.add(new Pair<>("pv", 1));
+//        behaviorList.add(new Pair<>("fav", 0));
+//        behaviorList.add(new Pair<>("cart", 0));
+//        behaviorList.add(new Pair<>("buy", 0));
         WeightRandom<String, Integer> weightRandom = new WeightRandom<>(behaviorList);
 
         final int SIZE = 10000;
@@ -59,7 +60,7 @@ public class RandomUserBehavior {
         }
 
         for (int i = 0; i < SIZE; i++) {
-            Long ts = 1511800929L + 10 * i;
+            Long ts = Instant.now().getEpochSecond() + 10 * i;
             UserBehavior behavior = new UserBehavior(
                     USERIDS[random.nextInt(100)],
                     ITEMIDS[random.nextInt(10)],
